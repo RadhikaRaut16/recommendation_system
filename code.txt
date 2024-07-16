@@ -1,0 +1,84 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from warnings import filterwarnings
+filterwarnings('ignore')
+pd.options.display.max_columns = 23
+data = pd.read_csv("appendix.csv")
+df = data.copy()
+pd.options.display.max_columns = 23
+df['Median Age'].hist()
+plt.title('Age Distribution For All the Courses')
+plt.xlabel('Student Ages');
+print(df['Course Subject'].value_counts())
+df['Course Subject'].value_counts().plot(kind='barh')
+plt.title('Nu of Courses in the Subject Category');
+plt.figure(figsize=(8,12))
+plt.subplot(2,1,1)
+plt.barh(df_present1['Course Title'].head(10), df_present1['Weight Avg'].head(10), color='orange')
+plt.gca().invert_yaxis()
+plt.title('Top 10 Courses by Rating')
+plt.xlabel('Course Rating')
+
+plt.subplot(2,1,2)
+plt.barh(df_present2['Course Title'].head(10), df_present2['Participants (Course Content Accessed)'].head(10), color='purple')
+plt.gca().invert_yaxis()
+plt.title('Top 10 Courses by Number of Students')
+plt.xlabel('Number of Students');
+ubject_list = list(df_new['Course Subject'].unique())
+subject_dict = {'a': subject_list[0], 'b': subject_list[1], 'c': subject_list[2], 'd': subject_list[3]}
+rint('Course categories: \n')
+print('a) ', subject_dict['a'])
+print('b) ', subject_dict['b'])
+print('c) ', subject_dict['c'])
+print('d) ', subject_dict['d'])
+
+def recommend(course_subject):
+    
+    filter_subject = df_new['Course Subject'] == course_subject
+    
+    print('\n Top 5 Rated Courses in %a \n' % course_subject)
+    df_rated = df_new[filter_subject].sort_values(by=['Weight Avg'], ascending=False).head()
+    print(df_rated[['Course Number', 'Course Title']])
+    
+    print('\nTop 5 Popular Courses in %a \n' % course_subject)
+    df_popular = df_new[filter_subject].sort_values(by=['Participants (Course Content Accessed)'], ascending=False).head()
+    print(df_popular[['Course Number', 'Course Title']])
+def recommend():
+    print('a) ', subject_dict['a'])
+    print('b) ', subject_dict['b'])
+    print('c) ', subject_dict['c'])
+    print('d) ', subject_dict['d'])
+    
+    print('\nChoose the subject you want to learn: \n')
+    user_input = input().lower()  # Convert input to lowercase to handle both uppercase and lowercase inputs
+    
+    if user_input in subject_dict:
+        course_subject = subject_dict[user_input]
+        
+        filter_subject = df_new['Course Subject'] == course_subject
+        
+        print('\nTop 5 Rated Courses in %s\n' % course_subject)
+        df_rated = df_new[filter_subject].sort_values(by=['Weight Avg'], ascending=False).head()
+        print(df_rated[['Course Number', 'Course Title']])
+        
+        print('\nTop 5 Popular Courses in %s\n' % course_subject)
+        df_popular = df_new[filter_subject].sort_values(by=['Participants (Course Content Accessed)'], ascending=False).head()
+        print(df_popular[['Course Number', 'Course Title']])
+        
+        print('\nWould you like to look for a different subject? (y/n)\n')
+        restart = input().lower()  # Convert input to lowercase
+        
+        if restart == 'y' or restart == 'yes':
+            recommend()
+        elif restart == 'n' or restart == 'no':
+            print('\nGoodbye!')
+        else:
+            print('\nWrong input.')
+    else:
+        print('\nInvalid input. Please choose a valid option.')
+        recommend()
+
+# Call the function to start the recommendation process
+recommend()
